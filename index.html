@@ -93,8 +93,8 @@ body {
 		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
 <link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
 <style>
-#lf-tilt{position:fixed;top:12px;right:12px;z-index:10;padding:10px 14px;font:600 15px system-ui;border-radius:10px;border:0;background:#f2a541;color:#222}
-#lf-tilt.on{background:#3a7d44;color:#fff}
+#lf-tilt{display:none;position:fixed;top:30%;left:50%;transform:translateX(-50%);z-index:10;padding:12px 18px;font:600 16px system-ui;border-radius:12px;border:0;background:#f2a541;color:#222}
+#lf-tilt.show{display:block}
 </style>
 <script>
 window.__lfTilt = {ok:false, denied:false, roll:0, pitch:0, n:0};
@@ -113,10 +113,15 @@ function lfEnableTilt(btn){
   var D = window.DeviceOrientationEvent;
   if (D && typeof D.requestPermission === 'function') {
     D.requestPermission().then(function(r){
-      if (r === 'granted') { lfListen(); btn.textContent='Tilt on'; btn.className='on'; }
+      if (r === 'granted') { lfListen(); btn.classList.remove('show'); }
       else { window.__lfTilt.denied = true; btn.textContent='Tilt blocked'; }
     }).catch(function(){ window.__lfTilt.denied = true; btn.textContent='Tilt blocked'; });
-  } else { lfListen(); btn.textContent='Tilt on'; btn.className='on'; }
+  } else { lfListen(); btn.classList.remove('show'); }
+}
+// The game shows the button only while the Tilt scheme is riding (RideHUD), until tilt is on.
+function lfTiltButton(on){
+  var b = document.getElementById('lf-tilt');
+  if (b) b.classList.toggle('show', !!on && !window.__lfTilt.ok);
 }
 document.addEventListener('DOMContentLoaded', function(){
   var b = document.createElement('button'); b.id='lf-tilt'; b.textContent='Enable tilt';
@@ -142,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 		<script src="index.js"></script>
 		<script>
-const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":29477924,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":29426796,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
 const engine = new Engine(GODOT_CONFIG);
 
